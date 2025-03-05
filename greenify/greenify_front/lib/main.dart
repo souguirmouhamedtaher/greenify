@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Greenify',
-      initialRoute: "/introductionOne",
+      initialRoute: "/userTypeChoice",
       routes: {
         "/introductionOne": (context) => introductionOne(),
         "/introductionTwo": (context) => introductionTwo(),
