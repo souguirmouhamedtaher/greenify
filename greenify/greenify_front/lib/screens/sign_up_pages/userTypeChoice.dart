@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:greenify_front/models/userModel.dart';
 import 'package:greenify_front/models/userTypeEnum.dart';
 import 'package:provider/provider.dart';
-import '../../models/userModel.dart';
 
 class userTypeChoice extends StatefulWidget {
   const userTypeChoice({super.key});
@@ -17,7 +16,7 @@ class _userTypeChoiceState extends State<userTypeChoice> {
 
   void _onContinue(BuildContext context) async {
     setState(() {
-      _isButtonDisabled = true; // Disable button to prevent multiple clicks
+      _isButtonDisabled = true;
     });
 
     try {
@@ -25,8 +24,7 @@ class _userTypeChoiceState extends State<userTypeChoice> {
       if (user.userType == null) {
         throw Exception('Please select a user type');
       }
-
-      // Navigate to the next screen
+      print(user.userType);
       Navigator.pushNamed(context, '/donneesGenerales');
     } catch (e) {
       // Handle errors (e.g., show a snackbar)
@@ -52,11 +50,9 @@ class _userTypeChoiceState extends State<userTypeChoice> {
         children: [
           Column(
             children: [
-              // Top green bar
               Container(height: 100, color: Colors.green.shade700),
               const SizedBox(height: 100),
 
-              // Farmer option card
               GestureDetector(
                 onTap: () {
                   user.setUserType(UserTypeEnum.farmer);
@@ -64,12 +60,10 @@ class _userTypeChoiceState extends State<userTypeChoice> {
                 child: OptionCard(
                   imagePath: 'assets/images/farmerIcon.png',
                   text: "Un agriculteur possédant une ferme",
-                  isSelected: user.userType == 'farmer',
+                  isSelected: user.userType == UserTypeEnum.farmer,
                 ),
               ),
               const SizedBox(height: 70),
-
-              // Employee option card
               GestureDetector(
                 onTap: () {
                   user.setUserType(UserTypeEnum.employee);
@@ -77,7 +71,7 @@ class _userTypeChoiceState extends State<userTypeChoice> {
                 child: OptionCard(
                   imagePath: 'assets/images/employeeIcon.png',
                   text: "Un employé cherchant un travail",
-                  isSelected: user.userType == 'employee',
+                  isSelected: user.userType == UserTypeEnum.employee,
                 ),
               ),
             ],
@@ -93,11 +87,11 @@ class _userTypeChoiceState extends State<userTypeChoice> {
                 onPressed:
                     _isButtonDisabled ? null : () => _onContinue(context),
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(30),
+                  padding: const EdgeInsets.only(left: 50, bottom: 50),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
-                  user.userType == 'farmer'
+                  user.userType == UserTypeEnum.farmer
                       ? "Continuer en tant qu’un agriculteur >"
                       : "Continuer en tant qu’un employé >",
                   style: GoogleFonts.poppins(
@@ -136,7 +130,7 @@ class OptionCard extends StatelessWidget {
       padding: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         color: isSelected ? Colors.green.shade100 : Colors.white,
-        border: Border.all(color: Colors.black),
+        border: Border.all(color: Colors.black, width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Stack(

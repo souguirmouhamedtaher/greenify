@@ -9,4 +9,7 @@ class appConstants {
 
 class appColors {
   static const Color greenifyGreen = Color(0xFF148C20);
+  getGreenifyGreen() {
+    return greenifyGreen;
+  }
 }
