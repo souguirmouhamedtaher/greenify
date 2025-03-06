@@ -141,7 +141,6 @@ class OptionCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Radio button icon
           Align(
             alignment: Alignment.topRight,
             child: Icon(
@@ -151,7 +150,6 @@ class OptionCard extends StatelessWidget {
             ),
           ),
 
-          // Custom image and text
           Align(
             alignment: Alignment.centerLeft,
             child: Row(

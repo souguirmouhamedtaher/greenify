@@ -33,17 +33,16 @@ class _userCredentialsState extends State<userCredentials> {
     try {
       final user = Provider.of<User>(context, listen: false);
       if (fk.currentState!.validate()) {
-        user.name = nc.text;
-        user.foreName = fnc.text;
-        user.birthDate = DateFormat("dd/MM/yyyy").parse(bdc.text);
-        user.phoneNumber = pnc.text;
-
         final phoneExists = await usuc.checkPhoneNumberExists(pnc.text);
         if (phoneExists) {
           setState(() {
             _phoneError = "Numero de telephone déja existant";
           });
         } else {
+          user.setName(nc.text);
+          user.setForeName(fnc.text);
+          user.setBirthDate(DateFormat("dd/MM/yyyy").parse(bdc.text));
+          user.setPhoneNumber(pnc.text);
           Navigator.pushNamed(context, '/userEmailChoice');
         }
       }
