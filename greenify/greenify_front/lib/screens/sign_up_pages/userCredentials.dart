@@ -32,8 +32,8 @@ class _userCredentialsState extends State<userCredentials> {
   Future<void> collect() async {
     try {
       final user = Provider.of<User>(context, listen: false);
-      if (fk.currentState!.validate()) {
-        final phoneExists = await usuc.checkPhoneNumberExists(pnc.text);
+      final phoneExists = await usuc.checkPhoneNumberExists(pnc.text);
+      if (fk.currentState!.validate() || phoneExists) {
         if (phoneExists) {
           setState(() {
             _phoneError = "Numero de telephone déja existant";
