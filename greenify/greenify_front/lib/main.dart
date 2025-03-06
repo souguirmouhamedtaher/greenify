@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greenify_front/models/userModel.dart';
 import 'package:greenify_front/screens/sign_up_pages/introductionOne.dart';
 import 'package:greenify_front/screens/sign_up_pages/introductionTwo.dart';
+import 'package:greenify_front/screens/sign_up_pages/userCredentials.dart';
 import 'package:greenify_front/screens/sign_up_pages/userTypeChoice.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         "/introductionOne": (context) => introductionOne(),
         "/introductionTwo": (context) => introductionTwo(),
         "/userTypeChoice": (context) => userTypeChoice(),
+        "/userCredentials": (context) => userCredentials(),
       },
     );
   }

@@ -1,33 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+
 class Helpers {
-  static bool isNameValid(String name) {
-    return RegExp(r'^[a-z A-Z\s]+$').hasMatch(name);
+  static bool isNameValid(String? name) {
+    return RegExp(r'^[a-z A-Z\s]+$').hasMatch(name!);
   }
 
-  static bool isForeNameValid(String foreName) {
-    return RegExp(r'^[a-z A-Z\s]+$').hasMatch(foreName);
+  static bool isForeNameValid(String? foreName) {
+    return RegExp(r'^[a-z A-Z\s]+$').hasMatch(foreName!);
   }
 
-  static bool isEmailValid(String email) {
-    return RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+').hasMatch(email);
+  static bool isDateValid(String? date) {
+    if (date == null || date.isEmpty) return false;
+    try {
+      DateTime bd = DateFormat("dd/MM/yyyy").parse(date);
+      DateTime n = DateTime.now();
+      int age = n.year - bd.year;
+      if (n.month < bd.month || (n.month == bd.month && n.day < bd.day)) {
+        age--;
+      }
+      if (age < 18) return false;
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
-  static bool isPhoneNumberValid(String phoneNumber) {
-    return RegExp(r'^[0-9]{8}$').hasMatch(phoneNumber);
+  static bool isEmailValid(String? email) {
+    return RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+').hasMatch(email!);
   }
 
-  static bool hasPasswordMinimumLength(String password) {
-    return password.length >= 8;
+  static bool isPhoneNumberValid(String? phoneNumber) {
+    return RegExp(r'^[0-9]{8}$').hasMatch(phoneNumber!);
   }
 
-  static bool hasPasswordUpperCase(String password) {
-    return RegExp(r'[A-Z]').hasMatch(password);
+  static bool hasPasswordMinimumLength(String? password) {
+    return password!.length >= 8;
   }
 
-  static bool hasPasswordLowerCase(String password) {
-    return RegExp(r'[a-z]').hasMatch(password);
+  static bool hasPasswordUpperCase(String? password) {
+    return RegExp(r'[A-Z]').hasMatch(password!);
   }
 
-  static bool hasPasswordDigit(String password) {
-    return RegExp(r'[0-9]').hasMatch(password);
+  static bool hasPasswordLowerCase(String? password) {
+    return RegExp(r'[a-z]').hasMatch(password!);
+  }
+
+  static bool hasPasswordDigit(String? password) {
+    return RegExp(r'[0-9]').hasMatch(password!);
+  }
+
+  String? validateName(String? value) {
+    if (isNameValid(value)) {
+      return null;
+    } else {
+      return "Nom invalide";
+    }
+  }
+
+  String? validateForeName(String? value) {
+    if (isForeNameValid(value)) {
+      return null;
+    } else {
+      return "Prénom invalide";
+    }
+  }
+
+  String? validatePhoneNumber(String? value) {
+    if (isPhoneNumberValid(value)) {
+      return null;
+    } else {
+      return "Numéro de téléphone invalide";
+    }
+  }
+
+  String? validateBirthDate(String? value) {
+    if (isDateValid(value)) {
+      return null;
+    } else {
+      return "Date de naissance invalide";
+    }
   }
 }

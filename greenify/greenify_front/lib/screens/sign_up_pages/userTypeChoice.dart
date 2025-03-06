@@ -24,17 +24,15 @@ class _userTypeChoiceState extends State<userTypeChoice> {
       if (user.userType == null) {
         throw Exception('Please select a user type');
       }
-      print(user.userType);
-      Navigator.pushNamed(context, '/donneesGenerales');
+      Navigator.pushNamed(context, '/userCredentials');
     } catch (e) {
-      // Handle errors (e.g., show a snackbar)
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Error: $e')));
     } finally {
       if (mounted) {
         setState(() {
-          _isButtonDisabled = false; // Re-enable the button
+          _isButtonDisabled = false;
         });
       }
     }
