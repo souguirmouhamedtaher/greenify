@@ -7,7 +7,7 @@ class userSignUpService {
 
   Future<bool> checkPhoneNumberExists(String phone) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/check-phone?phone=$phone'),
+      Uri.parse('$baseUrl/checkPhoneNumberExists?phoneNumber=$phone'),
     );
 
     if (response.statusCode == 200) {
