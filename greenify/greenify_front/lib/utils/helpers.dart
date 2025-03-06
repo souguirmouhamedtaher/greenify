@@ -77,7 +77,7 @@ class Helpers {
     if (isDateValid(value)) {
       return null;
     } else {
-      return "Date de naissance invalide";
+      return "Doit etre plus que 18 ans";
     }
   }
 }

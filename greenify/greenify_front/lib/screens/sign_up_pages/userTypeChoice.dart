@@ -14,13 +14,21 @@ class userTypeChoice extends StatefulWidget {
 class _userTypeChoiceState extends State<userTypeChoice> {
   bool _isButtonDisabled = false;
 
+  @override
+  void initState() {
+    super.initState();
+    final user = Provider.of<User>(context, listen: false);
+    user.userType ??= UserTypeEnum.farmer;
+  }
+
   void _onContinue(BuildContext context) async {
+    final user = Provider.of<User>(context, listen: false);
+
     setState(() {
       _isButtonDisabled = true;
     });
 
     try {
-      final user = Provider.of<User>(context, listen: false);
       if (user.userType == null) {
         throw Exception('Please select a user type');
       }
