@@ -80,4 +80,12 @@ class Helpers {
       return "Doit etre plus que 18 ans";
     }
   }
+
+  String? validateEmail(String? value) {
+    if (isEmailValid(value)) {
+      return null;
+    } else {
+      return "Email invalide";
+    }
+  }
 }

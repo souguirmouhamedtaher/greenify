@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class userSignUpService {
   static final baseUrl = appConstants.apiUrl;
 
-  Future<bool> checkPhoneNumberExists(String phone) async {
+  static Future<bool> checkPhoneNumberExists(String phone) async {
     final response = await http.get(
       Uri.parse('$baseUrl/checkPhoneNumberExists?phoneNumber=$phone'),
     );
