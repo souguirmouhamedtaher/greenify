@@ -5,6 +5,7 @@ import 'package:greenify_front/screens/sign_up_pages/introductionTwo.dart';
 import 'package:greenify_front/screens/sign_up_pages/userCredentials.dart';
 import 'package:greenify_front/screens/sign_up_pages/userEmailChoice.dart';
 import 'package:greenify_front/screens/sign_up_pages/userEmailCredential.dart';
+import 'package:greenify_front/screens/sign_up_pages/userPassword.dart';
 import 'package:greenify_front/screens/sign_up_pages/userTypeChoice.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         "/userTypeChoice": (context) => userTypeChoice(),
         "/userCredentials": (context) => userCredentials(),
         "/userEmailChoice": (context) => userEmailChoice(),
-        "userEmailCredential": (context) => userEmailCredential(),
+        "/userEmailCredential": (context) => userEmailCredential(),
+        "/userPassword": (context) => userPassword(),
       },
     );
   }

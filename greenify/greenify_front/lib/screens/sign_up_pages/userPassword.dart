@@ -140,6 +140,7 @@ class _userPasswordState extends State<userPassword> {
     if (isEqual && isLengthSup18 && hasDigit && hasLowerChar && hasUpperChar) {
       final user = Provider.of<User>(context, listen: false);
       user.setPassword(Helpers().encodePassword(pwc.text));
+      Navigator.pushNamed(context, '/userEmailChoice');
     }
   }
 
