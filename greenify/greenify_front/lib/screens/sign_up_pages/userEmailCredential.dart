@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:greenify_front/controllers/userSignUpController.dart';
 import 'package:greenify_front/models/userModel.dart';
+import 'package:greenify_front/repositories/userRepository.dart';
 import 'package:greenify_front/services/otpService.dart';
 import 'package:greenify_front/utils/helpers.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +21,7 @@ class _userEmailCredentialState extends State<userEmailCredential> {
   final GlobalKey<FormState> fk = GlobalKey<FormState>();
   String emailError = "";
   bool emailVerified = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +61,7 @@ class _userEmailCredentialState extends State<userEmailCredential> {
                     TextFormField(
                       controller: ec,
                       validator: Helpers().validateEmail,
+                      onChanged: (value) => validateEmail(),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -81,6 +87,15 @@ class _userEmailCredentialState extends State<userEmailCredential> {
                           fontSize: 12,
                           color: Colors.grey,
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      emailError,
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 200),
@@ -132,8 +147,13 @@ class _userEmailCredentialState extends State<userEmailCredential> {
     ));
   }
 
-  void validateForm() {
-    if (fk.currentState!.validate()) {
+  void initState() {
+    super.initState();
+    ec.addListener(validateEmail);
+  }
+
+  void validateEmail() {
+    if (Helpers().validateEmail(ec.text) == null) {
       setState(() {
         emailVerified = true;
       });
@@ -147,9 +167,24 @@ class _userEmailCredentialState extends State<userEmailCredential> {
   Future<void> sendOTP() async {
     final String email = ec.text;
     final user = Provider.of<User>(context, listen: false);
-    final phoneNumber = user.getPhoneNumber();
     try {
-      await otpService.sendOTP(email, phoneNumber!);
+      bool exists = await userSignUpController().checkEmailExists(email);
+      if (exists) {
+        setState(() {
+          emailError = "Cet adresse est déja utilisée !";
+        });
+      } else {
+        setState(() {
+          emailError = "";
+        });
+        print(user.toJson());
+        bool created = await userSignUpController().signUpUserWithoutEmail(
+          user.toJson(),
+        );
+        print(created);
+        if (created) {
+        } else {}
+      }
     } catch (e) {
       print(e);
     }

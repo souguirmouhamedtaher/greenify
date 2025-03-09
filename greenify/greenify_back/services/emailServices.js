@@ -1,43 +1,11 @@
-// services/emailService.js
-const Otp = require('../models/otpModel');
-const sgMail = require('@sendgrid/mail');
-const {sendGridApiKey  } = require('../utils/constants');
-const User = require('../services/userService');
-sgMail.setApiKey(sendGridApiKey);
+const User = require('../models/userModel');
 
-function generateOTP  ()  {
-    return Math.floor(1000 + Math.random() * 9000).toString();
-  };
-
-const sendOTP = async (email, phoneNumber) => {
-  const otp = generateOTP();
-
-  await Otp.create({ email,phoneNumber, otp });
-
-  const msg = {
-    to: email,
-    from: "souguir.mouhamed.taher.work@gmail.com",
-    subject: "Code de verification de votre compte",
-    text: EMAIL_TEXT(otp),
-  };
-
-  try {
-    await sgMail.send(msg);
-    console.log('OTP sent successfully');
-  } catch (error) {
-    console.error('Error sending OTP:', error);
-    throw new Error('Failed to send OTP');
-  }
+exports.checkEmailExists = async (req, res) => {
+    const { email } = req.query;
+    try {
+        const user = await User.findOne({ email });
+        res.json({ exists: user ? true : false });
+    } catch (e) {
+        res.status(500).json({ message: e.message });
+    }
 };
-
-const verifyOTP = async (phoneNumber, otp) => {
-  const otpRecord = await Otp.findOne({ phoneNumber, otp });
-  if (!otpRecord) {
-    throw new Error('Invalid OTP');
-  }
-  await User.updateUserByPhoneNumber(phoneNumber, { email : otpRecord.email , isGreenified: true });
-  await Otp.deleteOne({ phoneNumber, otp });
-  return true;
-};
-
-module.exports = { sendOTP, verifyOTP };

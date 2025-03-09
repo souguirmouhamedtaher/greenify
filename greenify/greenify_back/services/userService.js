@@ -2,21 +2,16 @@ const User = require('../models/userModel');
 
 
 
-const createUser = async (data = {name,foreName,email,password,birthDate,role,phoneNumber}) => {
+const createUser = async (req,res) => {
+    const userData = req.body;
     try {
-      const existingUser = await User.findOne({ phoneNumber });
-  
-      if (existingUser) {
-        throw new Error('User already exists');
-      }
-  
-      const user = await User.create({ data });
-      return user; 
+      const user = await User.create(userData);
+      console.log(user);
+      return user;
     } catch (e) {
       throw new Error(`Error creating user: ${e.message}`);
     }
-};
-
+}
 
 const findUserByPhoneNumber = async (phoneNumber) => {
   try {

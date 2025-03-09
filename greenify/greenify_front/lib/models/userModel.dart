@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:greenify_front/models/userTypeEnum.dart';
 
@@ -26,29 +28,36 @@ class User with ChangeNotifier {
 
   Map<String, dynamic> toJson() {
     return {
-      'userType': userType,
+      'userType': userType?.value,
       'name': name,
       'foreName': foreName,
       'email': email,
       'phoneNumber': phoneNumber,
       'password': password,
       'greenified': greenified,
-      'birthDate': birthDate,
-      'profilePicture': profilePicture,
+      'birthDate': birthDate?.toIso8601String(),
+      'profilePicture': profilePicture?.file.path,
     };
   }
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userType: json['userType'],
+      userType:
+          json['userType'] != null
+              ? UserTypeEnumExtension.fromValue(json['userType'])
+              : null,
       name: json['name'],
       foreName: json['foreName'],
       email: json['email'],
       phoneNumber: json['phoneNumber'],
       password: json['password'],
       greenified: json['greenified'],
-      birthDate: json['birthDate'],
-      profilePicture: json['profilePicture'],
+      birthDate:
+          json['birthDate'] != null ? DateTime.parse(json['birthDate']) : null,
+      profilePicture:
+          json['profilePicture'] != null
+              ? FileImage(File(json['profilePicture']))
+              : null,
     );
   }
 

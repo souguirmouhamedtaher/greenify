@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const phoneNumber = require('../services/phoneNumberService');
-const emailService = require('../services/emailServices');
+const pns = require('../services/phoneNumberService');
+const es = require('../services/emailServices');
+const us = require('../services/userService');
 
-router.get('/checkPhoneNumberExists', phoneNumber.checkPhoneNumberExists);
-router.post('/sendOTP', emailService.sendOTP);
-router.post('/verifyOTP', emailService.verifyOTP);
+router.get('/checkPhoneNumberExists', pns.checkPhoneNumberExists);
+router.get('/checkEmailExists', es.checkEmailExists);
+router.post('/createUser',us.createUser);
 module.exports = router;

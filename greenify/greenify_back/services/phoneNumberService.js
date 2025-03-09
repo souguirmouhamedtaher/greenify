@@ -1,3 +1,5 @@
+const User = require('../models/userModel');
+
 exports.checkPhoneNumberExists = async (req, res) => {
     const { phoneNumber } = req.query;
     try {
