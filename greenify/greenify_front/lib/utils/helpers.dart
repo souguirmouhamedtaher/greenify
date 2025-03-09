@@ -59,6 +59,17 @@ class Helpers {
     }
   }
 
+  String? validatePassword(String? value) {
+    if (hasPasswordMinimumLength(value) &&
+        hasPasswordUpperCase(value) &&
+        hasPasswordLowerCase(value) &&
+        hasPasswordDigit(value)) {
+      return null;
+    } else {
+      return "Mot de passe invalide";
+    }
+  }
+
   String? validateForeName(String? value) {
     if (isForeNameValid(value)) {
       return null;
