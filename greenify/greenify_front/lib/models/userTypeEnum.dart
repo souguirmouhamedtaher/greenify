@@ -7,10 +7,8 @@ extension UserTypeEnumExtension on UserTypeEnum {
         return 'employee';
       case UserTypeEnum.farmer:
         return 'farmer';
-      case UserTypeEnum.admin:
-        return 'admin';
       default:
-        throw ArgumentError('Unknown UserTypeEnum value');
+        throw Exception('Unknown UserTypeEnum value');
     }
   }
 
