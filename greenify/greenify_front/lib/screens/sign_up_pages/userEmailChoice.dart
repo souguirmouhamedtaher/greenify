@@ -76,7 +76,7 @@ class userEmailChoice extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "userEmailCredential");
+                          Navigator.pushNamed(context, "/userEmailCredential");
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

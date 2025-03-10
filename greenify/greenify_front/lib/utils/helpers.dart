@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:bcrypt/bcrypt.dart';
 
 class Helpers {
   static bool isNameValid(String? name) {
@@ -100,5 +101,13 @@ class Helpers {
     } else {
       return "Email invalide";
     }
+  }
+
+  String encodePassword(String p) {
+    return BCrypt.hashpw(p, BCrypt.gensalt());
+  }
+
+  bool decodePassword(String plainPassword, String hashedPassword) {
+    return BCrypt.checkpw(plainPassword, hashedPassword);
   }
 }

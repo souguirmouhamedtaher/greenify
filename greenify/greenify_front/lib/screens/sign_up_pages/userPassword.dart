@@ -65,74 +65,134 @@ class _userPasswordState extends State<userPassword> {
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text(
-                          "Mot de passe",
-                          style: GoogleFonts.poppins(fontSize: 20),
-                        ),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: Icon(Icons.warning, color: Colors.red),
+                        onPressed: () {
+                          showPasswordRequirements(context);
+                        },
                       ),
-                      buildPwField(
-                        pwc,
-                        Helpers().validatePassword(pwc.text)
-                            as String? Function(String? p1),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          buildV(isLengthSup18),
-                          SizedBox(width: 10),
-                          buildV(hasUpperChar),
-                          SizedBox(width: 10),
-                          buildV(hasLowerChar),
-                          SizedBox(width: 10),
-                          buildV(hasDigit),
+                          SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Text(
+                              "Mot de passe",
+                              style: GoogleFonts.poppins(fontSize: 20),
+                            ),
+                          ),
+                          buildPwField(pwc),
+                          SizedBox(height: 10),
+                          Row(
+                            children: [
+                              buildV(isLengthSup18),
+                              SizedBox(width: 10),
+                              buildV(hasUpperChar),
+                              SizedBox(width: 10),
+                              buildV(hasLowerChar),
+                              SizedBox(width: 10),
+                              buildV(hasDigit),
+                            ],
+                          ),
+                          SizedBox(height: 50),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Text(
+                              "Confirmer le mot de passe",
+                              style: GoogleFonts.poppins(fontSize: 20),
+                            ),
+                          ),
+                          buildPwField(cpwc),
+                          SizedBox(height: 10),
+                          buildVC(isEqual),
+                          SizedBox(height: 50),
                         ],
                       ),
-                      buildMissingConstraints(),
-                      SizedBox(height: 50),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text(
-                          "Confirmer le mot de passe",
-                          style: GoogleFonts.poppins(fontSize: 20),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        onPressed:
+                            (isLengthSup18 &&
+                                    hasUpperChar &&
+                                    hasLowerChar &&
+                                    hasDigit &&
+                                    isEqual)
+                                ? setUpPassword
+                                : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green.shade700,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
                         ),
-                      ),
-                      buildPwField(
-                        cpwc,
-                        verifyPw as String? Function(String? p1),
-                      ),
-                      SizedBox(height: 10),
-                      buildVC(isEqual),
-                      SizedBox(height: 50),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: setUpPassword,
-                          child: Text("Continuer"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green.shade700,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 50,
-                              vertical: 20,
-                            ),
-                            textStyle: GoogleFonts.poppins(fontSize: 20),
+                        child: Text(
+                          "Continuer >",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void showPasswordRequirements(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Exigences du mot de passe",
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              color: Colors.green.shade700,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            "Le mot de passe doit contenir:\n\n"
+            "- Au moins 8 caractères \n"
+            "- Une lettre majuscule [A...Z] \n"
+            "- Une lettre minuscule [a...z] \n"
+            "- Un chiffre [0...9]",
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("ok"),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -144,22 +204,18 @@ class _userPasswordState extends State<userPassword> {
     }
   }
 
-  Widget buildMissingConstraints() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8),
-      child: Text(
-        "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre",
-        style: GoogleFonts.poppins(fontSize: 12, color: Colors.red),
-      ),
-    );
-  }
-
-  Widget buildPwField(TextEditingController c, String? Function(String?) v) {
+  Widget buildPwField(TextEditingController c) {
     return TextFormField(
       controller: c,
       obscureText: !isVisiblePw,
+      onChanged: (value) {
+        verifyPw();
+      },
       decoration: InputDecoration(
-        hintText: "Mot de passe",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25),
+          borderSide: BorderSide(color: Colors.black, width: 5.0),
+        ),
         suffixIcon: IconButton(
           icon: Icon(isVisiblePw ? Icons.visibility : Icons.visibility_off),
           onPressed: () {
@@ -169,13 +225,7 @@ class _userPasswordState extends State<userPassword> {
           },
         ),
       ),
-      validator:
-          (v) =>
-              v!.isEmpty
-                  ? "Champ obligatoire"
-                  : c.text.length < 8
-                  ? "Le mot de passe doit contenir au moins 8 caractères"
-                  : null,
+      validator: (value) => Helpers().validatePassword(value),
     );
   }
 

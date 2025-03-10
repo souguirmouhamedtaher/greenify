@@ -43,7 +43,8 @@ class _userCredentialsState extends State<userCredentials> {
           user.setForeName(fnc.text);
           user.setBirthDate(DateFormat("dd/MM/yyyy").parse(bdc.text));
           user.setPhoneNumber(pnc.text);
-          Navigator.pushNamed(context, '/userEmailChoice');
+
+          Navigator.pushNamed(context, '/userPassword');
         }
       }
     } catch (e) {
