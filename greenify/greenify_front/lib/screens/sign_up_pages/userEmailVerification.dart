@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,8 +11,71 @@ class userEmailVerification extends StatefulWidget {
 }
 
 class _userEmailVerificationState extends State<userEmailVerification> {
+  Future<void> resendOTP() async {
+    // Add your resend OTP logic here
+  }
+
+  Future<void> verifyOTP() async {}
+
+  void forwardFocus(int index, BuildContext context) {
+    index > 0
+        ? FocusScope.of(context).previousFocus()
+        : FocusScope.of(context).unfocus();
+  }
+
+  void backwardFocus(int index, BuildContext context) {
+    index < 3
+        ? FocusScope.of(context).nextFocus()
+        : FocusScope.of(context).unfocus();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void startTimer() {
+    const os = Duration(seconds: 1);
+    timer = Timer.periodic(os, (timer) {
+      if (cd > 0) {
+        setState(() {
+          cd--;
+        });
+      } else {
+        timer.cancel();
+        resendOTP;
+      }
+    });
+  }
+
+  void resetTimer() {
+    setState(() {
+      cd = 300;
+    });
+    startTimer();
+  }
+
+  String? verificationMessage;
+  bool isLoading = false;
+  int cd = 300;
+  late Timer timer;
+
+  final List<TextEditingController> otpController = List.generate(
+    4,
+    (index) => TextEditingController(),
+  );
+
   @override
   Widget build(BuildContext context) {
+    final minutes = (cd ~/ 60).toString().padLeft(2, '0');
+    final seconds = (cd % 60).toString().padLeft(2, "0");
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -145,30 +210,36 @@ class _userEmailVerificationState extends State<userEmailVerification> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 60,),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: isLoading ? null () => verifyOTP(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green.shade700,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                  const SizedBox(height: 60),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : () => verifyOTP,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green.shade700,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: isLoading ?  CircularProgressIndicator(color: Colors.white,) :Text(
-                          "Verifier >",
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
-                          ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
                         ),
                       ),
+                      child:
+                          isLoading
+                              ? CircularProgressIndicator(color: Colors.white)
+                              : Text(
+                                "Verifier >",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                     ),
-                    SizedBox(height: 20,),
+                  ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -177,13 +248,4 @@ class _userEmailVerificationState extends State<userEmailVerification> {
       ),
     );
   }
-  void forwardFocus(int index,BuildContext context){
-    index>0 ? FocusScope.of(context).previousFocus() : FocusScope.of(context).unfocus(); 
-  }
-  void backwardFocus(int index,BuildContext context){
-    index<3 ? FocusScope.of(context).nextFocus() : FocusScope.of(context).unfocus();
-
-  }
-
-  
 }
