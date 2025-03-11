@@ -38,6 +38,13 @@ class OTPService {
       }),
     );
 
+    print('SendGrid Response Code: ${response.statusCode}');
+    print('SendGrid Response Body: ${response.body}');
+
+    if (response.statusCode != 202) {
+      print('Error sending email: ${response.body}');
+    }
+
     return response.statusCode == 202;
   }
 
@@ -73,11 +80,11 @@ class OTPService {
     return storeResponse.statusCode == 200;
   }
 
-  Future<bool> verifyOTP(String phoneNumber, String otp) async {
+  Future<bool> verifyOTP(String phoneNumber) async {
     final response = await http.post(
       Uri.parse('$baseUrl/verifyOTP'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'phoneNumber': phoneNumber, 'otp': otp}),
+      body: jsonEncode({'phoneNumber': phoneNumber}),
     );
 
     return response.statusCode == 200;

@@ -2,16 +2,19 @@ const User = require('../models/userModel');
 
 
 
-const createUser = async (req,res) => {
-    const userData = req.body;
-    try {
-      const user = new User(userData);
-      await user.save();
-      return(user)
-    } catch (e) {
-      throw new Error(`Error creating user: ${e.message}`);
-    }
-}
+const createUser = async (req, res) => {
+  const userData = req.body;
+
+  try {
+    const user = new User(userData);
+    await user.save();
+    console.log("user created successfully")
+    res.status(200).json({ success: true }); 
+  } catch (e) {
+    console.error("Error creating user:", e);
+    res.status(400).json({ success: false, error: e.message }); 
+  }
+};
 
 const findUserByPhoneNumber = async (phoneNumber) => {
   try {

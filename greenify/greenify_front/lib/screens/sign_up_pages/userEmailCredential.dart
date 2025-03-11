@@ -164,11 +164,9 @@ class _userEmailCredentialState extends State<userEmailCredential> {
   Future<void> sendOTP() async {
     final String email = ec.text;
     final user = Provider.of<User>(context, listen: false);
-    final String? phoneNumber =
-        user.phoneNumber; // Get the phone number from the user object
+    final String? phoneNumber = user.phoneNumber;
 
     try {
-      // Check if the email already exists
       bool exists = await userSignUpController().checkEmailExists(email);
       if (exists) {
         setState(() {
@@ -181,7 +179,6 @@ class _userEmailCredentialState extends State<userEmailCredential> {
         emailError = "";
       });
 
-      // Store the user without the email
       bool userCreated = await userSignUpController().signUpUserWithoutEmail(
         user.toJson(),
       );
@@ -193,11 +190,9 @@ class _userEmailCredentialState extends State<userEmailCredential> {
         return;
       }
 
-      // Generate OTP
       String otp = OTPService().generateOTP();
       DateTime expirationTime = DateTime.now().add(Duration(minutes: 5));
 
-      // Store OTP in the backend
       bool stored = await OTPService().storeOTP(
         email,
         otp,
@@ -206,11 +201,9 @@ class _userEmailCredentialState extends State<userEmailCredential> {
       );
 
       if (stored) {
-        // Send OTP to the user's email
         bool otpSent = await OTPService().sendOTP(email, otp);
 
         if (otpSent) {
-          // Navigate to the OTP verification screen
           Navigator.pushNamed(context, '/userEmailVerification');
         } else {
           setState(() {
@@ -226,7 +219,6 @@ class _userEmailCredentialState extends State<userEmailCredential> {
       setState(() {
         emailError = "Une erreur s'est produite. Veuillez réessayer.";
       });
-      print("Error in sendOTP: $e");
     }
   }
 }
