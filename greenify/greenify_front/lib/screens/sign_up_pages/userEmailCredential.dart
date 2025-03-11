@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:greenify_front/controllers/userSignUpController.dart';
 import 'package:greenify_front/models/userModel.dart';
-import 'package:greenify_front/repositories/userRepository.dart';
 import 'package:greenify_front/services/otpService.dart';
 import 'package:greenify_front/utils/helpers.dart';
 import 'package:provider/provider.dart';
@@ -167,26 +164,69 @@ class _userEmailCredentialState extends State<userEmailCredential> {
   Future<void> sendOTP() async {
     final String email = ec.text;
     final user = Provider.of<User>(context, listen: false);
+    final String? phoneNumber =
+        user.phoneNumber; // Get the phone number from the user object
+
     try {
+      // Check if the email already exists
       bool exists = await userSignUpController().checkEmailExists(email);
       if (exists) {
         setState(() {
-          emailError = "Cet adresse est déja utilisée !";
+          emailError = "Cet adresse est déjà utilisée !";
         });
+        return;
+      }
+
+      setState(() {
+        emailError = "";
+      });
+
+      // Store the user without the email
+      bool userCreated = await userSignUpController().signUpUserWithoutEmail(
+        user.toJson(),
+      );
+
+      if (!userCreated) {
+        setState(() {
+          emailError = "Échec de l'inscription. Veuillez réessayer.";
+        });
+        return;
+      }
+
+      // Generate OTP
+      String otp = OTPService().generateOTP();
+      DateTime expirationTime = DateTime.now().add(Duration(minutes: 5));
+
+      // Store OTP in the backend
+      bool stored = await OTPService().storeOTP(
+        email,
+        otp,
+        expirationTime,
+        phoneNumber!,
+      );
+
+      if (stored) {
+        // Send OTP to the user's email
+        bool otpSent = await OTPService().sendOTP(email, otp);
+
+        if (otpSent) {
+          // Navigate to the OTP verification screen
+          Navigator.pushNamed(context, '/userEmailVerification');
+        } else {
+          setState(() {
+            emailError = "Échec de l'envoi du OTP. Veuillez réessayer.";
+          });
+        }
       } else {
         setState(() {
-          emailError = "";
+          emailError = "Échec de l'enregistrement du OTP. Veuillez réessayer.";
         });
-        print(user.toJson());
-        bool created = await userSignUpController().signUpUserWithoutEmail(
-          user.toJson(),
-        );
-        print(created);
-        if (created) {
-        } else {}
       }
     } catch (e) {
-      print(e);
+      setState(() {
+        emailError = "Une erreur s'est produite. Veuillez réessayer.";
+      });
+      print("Error in sendOTP: $e");
     }
   }
 }

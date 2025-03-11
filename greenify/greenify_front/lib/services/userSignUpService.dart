@@ -32,18 +32,26 @@ class userSignUpService {
   }
 
   static Future<bool> signUpUserWithoutEmail(Map<String, dynamic> user) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/createUser'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(user),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/createUser'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(user),
+      );
 
-    if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        return responseData['success'] ?? false;
+      } else {
+        print('Failed to sign up user: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Exception during signup: $e');
       return false;
     }
-    return true;
   }
 
   static Future<bool> addEmailToUser(String email) async {

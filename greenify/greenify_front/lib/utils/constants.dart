@@ -3,7 +3,7 @@ import 'dart:ui';
 class appConstants {
   static const String appName = 'Greenify';
   static const String sendGridApiKey =
-      "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";
+      "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";
   static const String apiUrl = "http://10.0.2.2:5000/api/signup";
 }
 

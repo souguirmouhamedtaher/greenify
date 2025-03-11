@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 import 'package:bcrypt/bcrypt.dart';
 
@@ -109,5 +111,10 @@ class Helpers {
 
   bool decodePassword(String plainPassword, String hashedPassword) {
     return BCrypt.checkpw(plainPassword, hashedPassword);
+  }
+
+  String generateOTP() {
+    Random random = Random();
+    return (1000 + random.nextInt(9000)).toString();
   }
 }

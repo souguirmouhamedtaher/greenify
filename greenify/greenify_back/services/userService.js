@@ -5,9 +5,9 @@ const User = require('../models/userModel');
 const createUser = async (req,res) => {
     const userData = req.body;
     try {
-      const user = await User.create(userData);
-      console.log(user);
-      return user;
+      const user = new User(userData);
+      await user.save();
+      return(user)
     } catch (e) {
       throw new Error(`Error creating user: ${e.message}`);
     }
